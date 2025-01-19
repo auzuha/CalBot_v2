@@ -1,11 +1,13 @@
 from langchain_core.tools import tool
 
+from fuzzywuzzy import process
+
+from langchain_openai import ChatOpenAI
 from models.models import Food, FoodBase, Macros, Micros, Micronutrient, FoodItem
 
 from services.database import session
-from models.schemas import Food as FoodTable, FoodLogs as FoodLogsTable, Macro as MacroTable
 
-from langchain_openai import ChatOpenAI
+from models.schemas import Food as FoodTable, FoodLogs as FoodLogsTable, Macro as MacroTable
 
 from services.utils import start_of_today_in_ist
 
@@ -14,12 +16,26 @@ load_dotenv()
 
 llm = ChatOpenAI()
 
+def match_closest_name(name):
+    """
+    Perform fuzzy matching for a food name to get closest match from the database.
+    Works in case user logs 'eggs', llm sends name as 'eggs', fuzzy matching finds 'egg' in database, and changes 'eggs' to 'egg'
+    """
+    foods = session.query(FoodTable).all()
+    names = [food.name for food in foods]
+    print(names)
+    closest_match = process.extractOne(name, names)
+    print(closest_match)
+    return closest_match[0]
+
+
 @tool
 def get_food_info(food: FoodBase) -> Food:
     """
     Get information for a specific food item. Use only when user specifically asks for information.
     """
     name = food.name
+    name = match_closest_name(name)
     exists = session.query(FoodTable, MacroTable).join(FoodTable).filter_by(name=name).first()
     if not exists:
         return f"No information found on {name}."
@@ -57,7 +73,9 @@ def add_food_to_daily_log(fooditem: FoodItem):
     """
     Add a food item to the daily log.
     """
-    food = session.query(FoodTable).filter_by(name=fooditem.name).first()
+    name = fooditem.name
+    name = match_closest_name(name)
+    food = session.query(FoodTable).filter_by(name=name).first()
     food_item = FoodLogsTable(name=fooditem.name, quantity=fooditem.quantity, unit=fooditem.unit,food=food)
     session.add_all([food_item])
     session.commit()
@@ -82,4 +100,4 @@ def get_daily_log():
             total_macros_for_today[key] += adjusted_macros[key]
         foods_logged_today_macros.append(adjusted_macros)
     print(foods_logged_today_macros)
-    return f"Below is your daily log of food items eaten:\n{foods_logged_today_macros}\n\nTotal Macros:{total_macros_for_today}"
+    return f"Below is the daily log of food items eaten, please be as detailed as possible:\n{foods_logged_today_macros}\n\nTotal Macros:{total_macros_for_today}"
