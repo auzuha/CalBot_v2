@@ -1,12 +1,3 @@
-"""
-General Flow:
-
-user query -> llm_reasoner (select appropriate action) -> get relevant details from user -> perform action / get more details if required -> done
-
-Data acquisition flow:
-extract food item name from user message -> search in user's personal storage if not found then go for nutrionix api -> calculate if needed -> done
-
-"""
 import gradio as gr
 
 from services.graph import get_bot_response
