@@ -67,16 +67,5 @@ def test():
         for event in graph.stream({"messages": [("user", user_input)]}):
             for value in event.values():
                 print("Assistant:", value)#["messages"][-1].content)
-    #stream_graph_updates("Hello!")
-    #print(graph.invoke({'messages' : [("user", 'i want to add a new food item in the database, it is an egg with 100 calories'),
-    #                                  ("assistant", "I will need more information about the egg to add it to the database. Could you please provide the amount of protein, carbohydrates, fat, and fiber in the egg per serving?"),
-    #                                    ("user", "sure, protein is 100, carbs are 100, fat is 2"),
-    #                                    ("assistant","It seems like I missed the fiber information for the egg. Could you please provide the amount of fiber in the egg per serving as well?"),
-    #                                    ("user", "sure fiber is 55")
-    #                               ]}))
-    #llm = ChatOpenAI().bind_tools(tools)
-    #print(graph.invoke({'messages': [('user', 'hi')]})['messages'][-1].content)
-    stream_graph_updates('please add a banana shake and 2 eggs to my daily log')
-    #print(graph.invoke({'messages': [('user', 'i just ate 3 eggs, please add to log')]}))
-    #print(llm.invoke("can you give me a plan to get 2500 calories only using banana, milk, oats, eggs and english oven multigrain bread"))
+
 
