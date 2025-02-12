@@ -4,11 +4,11 @@ from typing import List, Union, Optional
 ## pydantic schemas
 
 class Macros(BaseModel):
-    calories: int = Field(description="The amount of calories in the food item per serving. -1 if unspecified.")
-    protein: float = Field(description="The amount of protein in the food item per serving. -1 if unspecified.")
-    carbs: float = Field(description="The amount of carbohydrates in the food item per serving. -1 if unspecified.")
-    fat: float = Field(description="The amount of fat in the food item per serving. -1 if unspecified.")
-    fiber: float = Field(description="The amount of fiber in the food item per serving. -1 if unspecified.")
+    calories: int = Field(description="The amount of calories in the food item per serving. -1 if unspecified.",default=-1)
+    protein: float = Field(description="The amount of protein in the food item per serving. -1 if unspecified.",default=-1)
+    carbs: float = Field(description="The amount of carbohydrates in the food item per serving. -1 if unspecified.",default=-1)
+    fat: float = Field(description="The amount of fat in the food item per serving. -1 if unspecified.",default=-1)
+    fiber: float = Field(description="The amount of fiber in the food item per serving. -1 if unspecified.", default=-1)
 
 class Micronutrient(BaseModel):
     attr_id: Union[str, int] = Field(description="The usda attribue id of the micronutrient.")
