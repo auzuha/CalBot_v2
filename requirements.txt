@@ -1,0 +1,8 @@
+gradio
+fastapi
+uvicorn
+langgraph
+langchain_openai
+fuzzywuzzy
+sqlalchemy
+python-dotenv
