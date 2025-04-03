@@ -8,7 +8,7 @@ from models.schemas import Food, Macro
 from services.database import session
 
 def add_food_item(food_name, calories, carbs, protein, fat, fiber, serving_size):
-    # Validation
+    # Validation to check if food is in the database.
     if not food_name or not isinstance(food_name, str):
         return "Food name must be a non-empty string."
     try:
