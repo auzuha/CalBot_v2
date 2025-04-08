@@ -7,6 +7,8 @@ from services import config
 from models.schemas import Food, Macro
 from services.database import session
 
+import os
+
 def add_food_item(food_name, calories, carbs, protein, fat, fiber, serving_size):
     # Validation to check if food is in the database.
     if not food_name or not isinstance(food_name, str):
@@ -78,6 +80,6 @@ with gr.Blocks() as demo:
 
 
 def main():
-    demo.launch()    
+    demo.launch(server_name="0.0.0.0", server_port=int(os.environ.get("PORT", 7860)))
 
 main()
